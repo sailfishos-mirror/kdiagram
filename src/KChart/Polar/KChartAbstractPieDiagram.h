@@ -10,11 +10,11 @@
 #define KCHARTABSTRACTPIEDIAGRAM_H
 
 #include "KChartAbstractPolarDiagram.h"
+#include "KChartThreeDPieAttributes.h"
 
 namespace KChart
 {
 class PieAttributes;
-class ThreeDPieAttributes;
 
 /**
  * @brief Base class for any diagram type
