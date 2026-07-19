@@ -10,6 +10,7 @@
 #define KCHARTRELATIVEPOSITION_H
 
 #include "KChartGlobal.h"
+#include "KChartPosition.h"
 #include <QDebug>
 #include <QMetaType>
 #include <QPointF>
@@ -19,8 +20,6 @@
 namespace KChart
 {
 
-class Position;
-class PositionPoints;
 class Measure;
 
 /**
