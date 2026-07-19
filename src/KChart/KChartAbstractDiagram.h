@@ -51,6 +51,8 @@ protected:
 public:
     ~AbstractDiagram() override;
 
+    using QAbstractItemView::CursorAction;
+
     /**
      * Returns true if both diagrams have the same settings.
      */
