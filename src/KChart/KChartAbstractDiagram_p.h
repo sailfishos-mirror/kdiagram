@@ -43,6 +43,20 @@
 
 namespace KChart
 {
+
+/**
+ * @brief Internally used class just adding a special constructor used by AbstractDiagram
+ */
+class PrivateAttributesModel : public AttributesModel
+{
+    Q_OBJECT
+public:
+    explicit PrivateAttributesModel(QAbstractItemModel *model, QObject *parent = nullptr)
+        : AttributesModel(model, parent)
+    {
+    }
+};
+
 class LabelPaintInfo
 {
 public:
