@@ -222,8 +222,7 @@ QPen StockDiagram::downTrendCandlestickPen(int column) const
 #if defined(Q_COMPILER_MANGLES_RETURN_TYPE)
 const
 #endif
-    int
-    StockDiagram::numberOfAbscissaSegments() const
+    int StockDiagram::numberOfAbscissaSegments() const
 {
     return 1;
 }
@@ -231,8 +230,7 @@ const
 #if defined(Q_COMPILER_MANGLES_RETURN_TYPE)
 const
 #endif
-    int
-    StockDiagram::numberOfOrdinateSegments() const
+    int StockDiagram::numberOfOrdinateSegments() const
 {
     return 1;
 }

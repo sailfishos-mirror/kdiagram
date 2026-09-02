@@ -743,8 +743,7 @@ void CartesianCoordinatePlane::setAutoAdjustGridToZoom(bool autoAdjust)
 #if defined(Q_COMPILER_MANGLES_RETURN_TYPE)
 const
 #endif
-    bool
-    CartesianCoordinatePlane::autoAdjustGridToZoom() const
+    bool CartesianCoordinatePlane::autoAdjustGridToZoom() const
 {
     return d->autoAdjustGridToZoom;
 }

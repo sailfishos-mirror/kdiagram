@@ -321,8 +321,7 @@ void BarDiagram::resize(const QSizeF &size)
 #if defined(Q_COMPILER_MANGLES_RETURN_TYPE)
 const
 #endif
-    int
-    BarDiagram::numberOfAbscissaSegments() const
+    int BarDiagram::numberOfAbscissaSegments() const
 {
     return d->attributesModel->rowCount(attributesModelRootIndex());
 }
@@ -330,8 +329,7 @@ const
 #if defined(Q_COMPILER_MANGLES_RETURN_TYPE)
 const
 #endif
-    int
-    BarDiagram::numberOfOrdinateSegments() const
+    int BarDiagram::numberOfOrdinateSegments() const
 {
     return d->attributesModel->columnCount(attributesModelRootIndex());
 }

@@ -153,8 +153,7 @@ qreal TextAttributes::calculatedFontSize(const QSizeF &referenceSize, KChartEnum
 #if defined(Q_COMPILER_MANGLES_RETURN_TYPE)
 const
 #endif
-    qreal
-    TextAttributes::calculatedFontSize(const QObject *autoReferenceArea, KChartEnums::MeasureOrientation autoReferenceOrientation) const
+    qreal TextAttributes::calculatedFontSize(const QObject *autoReferenceArea, KChartEnums::MeasureOrientation autoReferenceOrientation) const
 {
     const qreal normalSize = fontSize().calculatedValue(autoReferenceArea, autoReferenceOrientation);
     const qreal minimalSize = minimalFontSize().calculatedValue(autoReferenceArea, autoReferenceOrientation);

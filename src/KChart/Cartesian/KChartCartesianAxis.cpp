@@ -473,8 +473,7 @@ void CartesianAxis::setPosition(Position p)
 #if defined(Q_COMPILER_MANGLES_RETURN_TYPE)
 const
 #endif
-    CartesianAxis::Position
-    CartesianAxis::position() const
+    CartesianAxis::Position CartesianAxis::position() const
 {
     return d->position;
 }

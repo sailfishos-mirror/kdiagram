@@ -318,8 +318,7 @@ void LineDiagram::resize(const QSizeF &size)
 #if defined(Q_COMPILER_MANGLES_RETURN_TYPE)
 const
 #endif
-    int
-    LineDiagram::numberOfAbscissaSegments() const
+    int LineDiagram::numberOfAbscissaSegments() const
 {
     return d->attributesModel->rowCount(attributesModelRootIndex());
 }
@@ -327,8 +326,7 @@ const
 #if defined(Q_COMPILER_MANGLES_RETURN_TYPE)
 const
 #endif
-    int
-    LineDiagram::numberOfOrdinateSegments() const
+    int LineDiagram::numberOfOrdinateSegments() const
 {
     return d->attributesModel->columnCount(attributesModelRootIndex());
 }

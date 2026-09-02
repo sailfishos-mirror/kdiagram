@@ -389,8 +389,7 @@ void KChart::AbstractCoordinatePlane::mouseMoveEvent(QMouseEvent *event)
 #if defined(Q_COMPILER_MANGLES_RETURN_TYPE)
 const
 #endif
-    bool
-    KChart::AbstractCoordinatePlane::isVisiblePoint(const QPointF &point) const
+    bool KChart::AbstractCoordinatePlane::isVisiblePoint(const QPointF &point) const
 {
     return d->isVisiblePoint(this, point);
 }

@@ -389,8 +389,7 @@ void Plotter::calcMergeRadius()
 #if defined(Q_COMPILER_MANGLES_RETURN_TYPE)
 const
 #endif
-    int
-    Plotter::numberOfAbscissaSegments() const
+    int Plotter::numberOfAbscissaSegments() const
 {
     return d->attributesModel->rowCount(attributesModelRootIndex());
 }
@@ -398,8 +397,7 @@ const
 #if defined(Q_COMPILER_MANGLES_RETURN_TYPE)
 const
 #endif
-    int
-    Plotter::numberOfOrdinateSegments() const
+    int Plotter::numberOfOrdinateSegments() const
 {
     return d->attributesModel->columnCount(attributesModelRootIndex());
 }
