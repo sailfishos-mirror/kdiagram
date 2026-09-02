@@ -9,9 +9,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-
-#include	<QWidget>
-
+#include <QWidget>
 
 class ModelParamVsParam;
 
@@ -20,37 +18,33 @@ class QLineEdit;
 
 namespace KChart
 {
-	class	LineDiagram;
+class LineDiagram;
 }
 
-
-class	MainWindow:	public QWidget
+class MainWindow : public QWidget
 {
-	 Q_OBJECT
+    Q_OBJECT
 
 public:
-	 MainWindow(
-		 QWidget					*p_parent =	nullptr);
+    MainWindow(QWidget *p_parent = nullptr);
 
-	 ~MainWindow() override;
+    ~MainWindow() override;
 
 private Q_SLOTS:
-	void timeoutEditingFinished();
-	void editingFinished();
+    void timeoutEditingFinished();
+    void editingFinished();
 
 private:
-	void addPlots();
-	void removePlots();
-	void setMarkerAttributes(
-		KChart::LineDiagram		*p_lineDiagram);
+    void addPlots();
+    void removePlots();
+    void setMarkerAttributes(KChart::LineDiagram *p_lineDiagram);
 
 private:
-	ModelParamVsParam		*m_sourceModel;
-	QLineEdit				*m_timeoutLineEdit;
-	QLineEdit				*m_nrOfParametersLineEdit;
-	QLineEdit				*m_nrOfSamplesLineEdit;
-	QGridLayout				*m_paramVsParamGridLayout;
-};	//	class	MainWindow
-
+    ModelParamVsParam *m_sourceModel;
+    QLineEdit *m_timeoutLineEdit;
+    QLineEdit *m_nrOfParametersLineEdit;
+    QLineEdit *m_nrOfSamplesLineEdit;
+    QGridLayout *m_paramVsParamGridLayout;
+}; //	class	MainWindow
 
 #endif // MAINWINDOW_H

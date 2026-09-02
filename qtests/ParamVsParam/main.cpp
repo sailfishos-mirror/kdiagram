@@ -10,27 +10,27 @@
 #include <QElapsedTimer>
 #include <QtTest/QtTest>
 
-class TestParamVsParam: public QObject {
+class TestParamVsParam : public QObject
+{
     Q_OBJECT
 private Q_SLOTS:
 
-  void testMainWindow()
-  {
-    QElapsedTimer t;
-    t.start();
+    void testMainWindow()
+    {
+        QElapsedTimer t;
+        t.start();
 
-    MainWindow      mainWindow;
+        MainWindow mainWindow;
 
-    qDebug("time constructor: %lld ms", t.elapsed());
+        qDebug("time constructor: %lld ms", t.elapsed());
 
-    mainWindow.show();
-    QTimer::singleShot(0, qApp, SLOT(quit()));
+        mainWindow.show();
+        QTimer::singleShot(0, qApp, SLOT(quit()));
 
-    qDebug("time show(): %lld ms", t.elapsed());
-    // uncomment to see it blink:
-    // QTest::qWait( 10000 );
-
-  }
+        qDebug("time show(): %lld ms", t.elapsed());
+        // uncomment to see it blink:
+        // QTest::qWait( 10000 );
+    }
 };
 
 QTEST_MAIN(TestParamVsParam)

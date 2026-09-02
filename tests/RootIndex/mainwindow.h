@@ -12,14 +12,15 @@
 #include "ui_mainwindow.h"
 #include <QStandardItemModel>
 
-namespace KChart {
-    class Chart;
-    class DatasetProxyModel;
-    class LineDiagram;
-    class BarDiagram;
-    class LineAttributes;
-    class CartesianAxis;
-    class CartesianCoordinatePlane;
+namespace KChart
+{
+class Chart;
+class DatasetProxyModel;
+class LineDiagram;
+class BarDiagram;
+class LineAttributes;
+class CartesianAxis;
+class CartesianCoordinatePlane;
 }
 
 class MainWindow : public QWidget, private Ui::MainWindow
@@ -27,21 +28,18 @@ class MainWindow : public QWidget, private Ui::MainWindow
     Q_OBJECT
 
 public:
-    MainWindow( QWidget* parent = nullptr );
+    MainWindow(QWidget *parent = nullptr);
 
 private:
-    KChart::Chart* m_chart;
+    KChart::Chart *m_chart;
     QStandardItemModel m_model;
     QStandardItemModel m_model2;
-    KChart::DatasetProxyModel* m_datasetProxy;
-    KChart::LineDiagram* m_lines;
-    KChart::BarDiagram* m_bars;
-    KChart::CartesianCoordinatePlane* plane;
+    KChart::DatasetProxyModel *m_datasetProxy;
+    KChart::LineDiagram *m_lines;
+    KChart::BarDiagram *m_bars;
+    KChart::CartesianCoordinatePlane *plane;
     // mutable KChart::CartesianAxis xAxis;
-    //mutable KChart::CartesianAxis yAxis;
-    
+    // mutable KChart::CartesianAxis yAxis;
 };
 
-
 #endif /* MAINWINDOW_H */
-

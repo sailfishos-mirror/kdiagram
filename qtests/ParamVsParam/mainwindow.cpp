@@ -14,88 +14,77 @@
 #include <QLabel>
 #include <QLineEdit>
 
-
 #include <KChartChart>
 #include <KChartDataValueAttributes>
 #include <KChartGridAttributes>
 #include <KChartLineDiagram>
 
-
 using namespace KChart;
 
-
-MainWindow::MainWindow(
-    QWidget					*p_parent)
-:
-    QWidget(p_parent),
-	m_sourceModel(new ModelParamVsParam),
-	m_timeoutLineEdit(new QLineEdit("1")),
-	m_nrOfParametersLineEdit(new QLineEdit("4")),
-	m_nrOfSamplesLineEdit(new QLineEdit("4")),
-	m_paramVsParamGridLayout(new QGridLayout)
+MainWindow::MainWindow(QWidget *p_parent)
+    : QWidget(p_parent)
+    , m_sourceModel(new ModelParamVsParam)
+    , m_timeoutLineEdit(new QLineEdit("1"))
+    , m_nrOfParametersLineEdit(new QLineEdit("4"))
+    , m_nrOfSamplesLineEdit(new QLineEdit("4"))
+    , m_paramVsParamGridLayout(new QGridLayout)
 {
-	connect(m_timeoutLineEdit, SIGNAL(editingFinished()), SLOT(timeoutEditingFinished()));
-	connect(m_nrOfParametersLineEdit, SIGNAL(editingFinished()), SLOT(editingFinished()));
-	connect(m_nrOfSamplesLineEdit, SIGNAL(editingFinished()), SLOT(editingFinished()));
+    connect(m_timeoutLineEdit, SIGNAL(editingFinished()), SLOT(timeoutEditingFinished()));
+    connect(m_nrOfParametersLineEdit, SIGNAL(editingFinished()), SLOT(editingFinished()));
+    connect(m_nrOfSamplesLineEdit, SIGNAL(editingFinished()), SLOT(editingFinished()));
 
-	QVBoxLayout	*vBoxLayout = new QVBoxLayout;
-	setLayout(vBoxLayout);
+    QVBoxLayout *vBoxLayout = new QVBoxLayout;
+    setLayout(vBoxLayout);
 
-	QGridLayout	*gridLayout = new QGridLayout;
-	vBoxLayout->addLayout(gridLayout);
-	gridLayout->setColumnStretch(2, 1);
+    QGridLayout *gridLayout = new QGridLayout;
+    vBoxLayout->addLayout(gridLayout);
+    gridLayout->setColumnStretch(2, 1);
 
-	int	row(0);
+    int row(0);
 
-	gridLayout->addWidget(new QLabel("Timeout [sec]:"), row, 0);
-	gridLayout->addWidget(m_timeoutLineEdit, row++, 1);
+    gridLayout->addWidget(new QLabel("Timeout [sec]:"), row, 0);
+    gridLayout->addWidget(m_timeoutLineEdit, row++, 1);
 
-	gridLayout->addWidget(new QLabel("Number of Parameters:"), row, 0);
-	gridLayout->addWidget(m_nrOfParametersLineEdit, row++, 1);
+    gridLayout->addWidget(new QLabel("Number of Parameters:"), row, 0);
+    gridLayout->addWidget(m_nrOfParametersLineEdit, row++, 1);
 
-	gridLayout->addWidget(new QLabel("Number of Samples:"), row, 0);
-	gridLayout->addWidget(m_nrOfSamplesLineEdit, row++, 1);
+    gridLayout->addWidget(new QLabel("Number of Samples:"), row, 0);
+    gridLayout->addWidget(m_nrOfSamplesLineEdit, row++, 1);
 
-	vBoxLayout->addLayout(m_paramVsParamGridLayout);
+    vBoxLayout->addLayout(m_paramVsParamGridLayout);
 
-	m_sourceModel->setTimeout(m_timeoutLineEdit->text().toInt());
-	m_sourceModel->populate(m_nrOfParametersLineEdit->text().toInt(), m_nrOfSamplesLineEdit->text().toInt());
-	addPlots();
+    m_sourceModel->setTimeout(m_timeoutLineEdit->text().toInt());
+    m_sourceModel->populate(m_nrOfParametersLineEdit->text().toInt(), m_nrOfSamplesLineEdit->text().toInt());
+    addPlots();
 } // MainWindow::MainWindow()
-
 
 MainWindow::~MainWindow()
 {
-	delete m_sourceModel;
-	m_sourceModel = nullptr;
+    delete m_sourceModel;
+    m_sourceModel = nullptr;
 } // MainWindow::~MainWindow()
-
 
 void MainWindow::timeoutEditingFinished()
 {
-	if (m_timeoutLineEdit->isModified())
-	{
-		m_timeoutLineEdit->setModified(false);
-		m_sourceModel->setTimeout(m_timeoutLineEdit->text().toInt());
-	}
+    if (m_timeoutLineEdit->isModified()) {
+        m_timeoutLineEdit->setModified(false);
+        m_sourceModel->setTimeout(m_timeoutLineEdit->text().toInt());
+    }
 } // MainWindow::timeoutEditingFinished()
-
 
 void MainWindow::editingFinished()
 {
-	if (m_nrOfParametersLineEdit->isModified() || m_nrOfSamplesLineEdit->isModified())
-	{
-		m_nrOfParametersLineEdit->setModified(false);
-		m_nrOfSamplesLineEdit->setModified(false);
+    if (m_nrOfParametersLineEdit->isModified() || m_nrOfSamplesLineEdit->isModified()) {
+        m_nrOfParametersLineEdit->setModified(false);
+        m_nrOfSamplesLineEdit->setModified(false);
 
-		m_sourceModel->populate(m_nrOfParametersLineEdit->text().toInt(), m_nrOfSamplesLineEdit->text().toInt());
-		m_sourceModel->stopSampling();
-		removePlots();
-		addPlots();
-		m_sourceModel->startSampling();
-	}
+        m_sourceModel->populate(m_nrOfParametersLineEdit->text().toInt(), m_nrOfSamplesLineEdit->text().toInt());
+        m_sourceModel->stopSampling();
+        removePlots();
+        addPlots();
+        m_sourceModel->startSampling();
+    }
 } // MainWindow::editingFinished()
-
 
 void MainWindow::addPlots()
 {
@@ -142,46 +131,42 @@ void MainWindow::addPlots()
     } // for all columns
 } // MainWindow::addPlots()
 
-
 void MainWindow::removePlots()
 {
-	while (m_paramVsParamGridLayout->count())
-	{
-		Chart *chart = static_cast<Chart *>(m_paramVsParamGridLayout->itemAt(0)->widget());
-		m_paramVsParamGridLayout->removeWidget(chart);
-		delete chart;
-	}
+    while (m_paramVsParamGridLayout->count()) {
+        Chart *chart = static_cast<Chart *>(m_paramVsParamGridLayout->itemAt(0)->widget());
+        m_paramVsParamGridLayout->removeWidget(chart);
+        delete chart;
+    }
 } // MainWindow::removePlots()
 
-
-void MainWindow::setMarkerAttributes(
-	KChart::LineDiagram		*p_lineDiagram)
+void MainWindow::setMarkerAttributes(KChart::LineDiagram *p_lineDiagram)
 {
-	QColor								markerColor			= Qt::green;
-	MarkerAttributes::MarkerStyle	markerStyle			= MarkerAttributes::Marker4Pixels;
-	QColor								firstMarkerColor	= Qt::red;
-	MarkerAttributes::MarkerStyle	firstMarkerStyle	= MarkerAttributes::MarkerDiamond;
-	DataValueAttributes				dva					= p_lineDiagram->dataValueAttributes();
-	MarkerAttributes					ma						= dva.markerAttributes();
-	TextAttributes						ta						= dva.textAttributes();
+    QColor markerColor = Qt::green;
+    MarkerAttributes::MarkerStyle markerStyle = MarkerAttributes::Marker4Pixels;
+    QColor firstMarkerColor = Qt::red;
+    MarkerAttributes::MarkerStyle firstMarkerStyle = MarkerAttributes::MarkerDiamond;
+    DataValueAttributes dva = p_lineDiagram->dataValueAttributes();
+    MarkerAttributes ma = dva.markerAttributes();
+    TextAttributes ta = dva.textAttributes();
 
-	ma.setVisible(true);
-	ma.setMarkerColor(markerColor);
-	ma.setMarkerStyle(markerStyle);
-	dva.setMarkerAttributes(ma);
+    ma.setVisible(true);
+    ma.setMarkerColor(markerColor);
+    ma.setMarkerStyle(markerStyle);
+    dva.setMarkerAttributes(ma);
 
-	ta.setVisible(false);
-	dva.setTextAttributes(ta);
+    ta.setVisible(false);
+    dva.setTextAttributes(ta);
 
-	dva.setVisible(true);
-	p_lineDiagram->setDataValueAttributes(0, dva);
-	p_lineDiagram->setDataValueAttributes(1, dva);
+    dva.setVisible(true);
+    p_lineDiagram->setDataValueAttributes(0, dva);
+    p_lineDiagram->setDataValueAttributes(1, dva);
 
-	// Override for first row.
-	ma.setMarkerColor(firstMarkerColor);
-	ma.setMarkerStyle(firstMarkerStyle);
-	dva.setMarkerAttributes(ma);
-	QAbstractItemModel	*model = p_lineDiagram->model();
-	p_lineDiagram->setDataValueAttributes(model->index(0, 0), dva);
-	p_lineDiagram->setDataValueAttributes(model->index(0, 1), dva);
+    // Override for first row.
+    ma.setMarkerColor(firstMarkerColor);
+    ma.setMarkerStyle(firstMarkerStyle);
+    dva.setMarkerAttributes(ma);
+    QAbstractItemModel *model = p_lineDiagram->model();
+    p_lineDiagram->setDataValueAttributes(model->index(0, 0), dva);
+    p_lineDiagram->setDataValueAttributes(model->index(0, 1), dva);
 } // MainWindow::setMarkerAttributes()

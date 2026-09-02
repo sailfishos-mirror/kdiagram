@@ -9,165 +9,165 @@
 #include <QtTest/QtTest>
 
 #include <KChartBarDiagram>
-#include <KChartLineDiagram>
-#include <KChartPieDiagram>
-#include <KChartPieAttributes>
-#include <KChartThreeDPieAttributes>
-#include <KChartThreeDBarAttributes>
-#include <KChartPolarDiagram>
-#include <KChartRingDiagram>
 #include <KChartHeaderFooter>
 #include <KChartLegend>
+#include <KChartLineDiagram>
+#include <KChartPieAttributes>
+#include <KChartPieDiagram>
+#include <KChartPolarDiagram>
+#include <KChartRingDiagram>
+#include <KChartThreeDBarAttributes>
+#include <KChartThreeDPieAttributes>
 
 #include <memory>
 
 using namespace KChart;
 
-class TestCloning: public QObject {
+class TestCloning : public QObject
+{
     Q_OBJECT
 private Q_SLOTS:
 
     void initTestCase()
-        {
-        }
+    {
+    }
 
     void testCloningBarDiagram()
-        {
-            BarDiagram diagram;
-            diagram.setType(BarDiagram::Stacked);
-            CartesianAxis *axis = new CartesianAxis;
-            diagram.addAxis(axis);
-            QCOMPARE(diagram.axes().count(), 1);
-            BarAttributes attrs;
-            attrs.setFixedDataValueGap( 3.0 );
-            attrs.setFixedBarWidth( 30.0 );
-            attrs.setDrawSolidExcessArrows( false );
-            diagram.setBarAttributes(attrs);
-            attrs.setDrawSolidExcessArrows( true );
-            diagram.setBarAttributes(0, attrs);
-            attrs.setDrawSolidExcessArrows( false );
-            ThreeDBarAttributes threeDAttrs;
-            threeDAttrs.setUseShadowColors( false );
-            diagram.setThreeDBarAttributes(threeDAttrs);
-            auto clone = std::unique_ptr<BarDiagram>(diagram.clone());
-            QCOMPARE(diagram.type(), clone->type());
-            // We do not clone the axes.
-            QCOMPARE( clone->axes().count(), 0 );
-            // And neither the reference diagram.
-            QCOMPARE( clone->referenceDiagram(), (AbstractCartesianDiagram*)nullptr );
-            QCOMPARE( clone->referenceDiagramOffset(), QPointF() );
-            // And neither the plane.
-            QCOMPARE( clone->coordinatePlane(), (AbstractCoordinatePlane*)nullptr );
-            QCOMPARE(diagram.allowOverlappingDataValueTexts(), clone->allowOverlappingDataValueTexts());
-            QCOMPARE(diagram.antiAliasing(), clone->antiAliasing());
-            QCOMPARE(diagram.percentMode(), clone->percentMode());
-            QCOMPARE(diagram.datasetDimension(), clone->datasetDimension());
-            QCOMPARE(diagram.barAttributes(), clone->barAttributes());
-            QCOMPARE(diagram.threeDBarAttributes(), clone->threeDBarAttributes());
+    {
+        BarDiagram diagram;
+        diagram.setType(BarDiagram::Stacked);
+        CartesianAxis *axis = new CartesianAxis;
+        diagram.addAxis(axis);
+        QCOMPARE(diagram.axes().count(), 1);
+        BarAttributes attrs;
+        attrs.setFixedDataValueGap(3.0);
+        attrs.setFixedBarWidth(30.0);
+        attrs.setDrawSolidExcessArrows(false);
+        diagram.setBarAttributes(attrs);
+        attrs.setDrawSolidExcessArrows(true);
+        diagram.setBarAttributes(0, attrs);
+        attrs.setDrawSolidExcessArrows(false);
+        ThreeDBarAttributes threeDAttrs;
+        threeDAttrs.setUseShadowColors(false);
+        diagram.setThreeDBarAttributes(threeDAttrs);
+        auto clone = std::unique_ptr<BarDiagram>(diagram.clone());
+        QCOMPARE(diagram.type(), clone->type());
+        // We do not clone the axes.
+        QCOMPARE(clone->axes().count(), 0);
+        // And neither the reference diagram.
+        QCOMPARE(clone->referenceDiagram(), (AbstractCartesianDiagram *)nullptr);
+        QCOMPARE(clone->referenceDiagramOffset(), QPointF());
+        // And neither the plane.
+        QCOMPARE(clone->coordinatePlane(), (AbstractCoordinatePlane *)nullptr);
+        QCOMPARE(diagram.allowOverlappingDataValueTexts(), clone->allowOverlappingDataValueTexts());
+        QCOMPARE(diagram.antiAliasing(), clone->antiAliasing());
+        QCOMPARE(diagram.percentMode(), clone->percentMode());
+        QCOMPARE(diagram.datasetDimension(), clone->datasetDimension());
+        QCOMPARE(diagram.barAttributes(), clone->barAttributes());
+        QCOMPARE(diagram.threeDBarAttributes(), clone->threeDBarAttributes());
 
-            QVERIFY(diagram.attributesModel() != clone->attributesModel());
-        }
+        QVERIFY(diagram.attributesModel() != clone->attributesModel());
+    }
 
     void testCloningLineDiagram()
-        {
-            LineDiagram diagram;
-            diagram.setType(LineDiagram::Percent);
-            LineAttributes attrs;
-            attrs.setMissingValuesPolicy( LineAttributes::MissingValuesShownAsZero );
-            diagram.setLineAttributes(attrs);
-            auto clone = std::unique_ptr<LineDiagram>(diagram.clone());
-            QCOMPARE(diagram.type(), clone->type());
-            QCOMPARE(diagram.lineAttributes(), clone->lineAttributes());
+    {
+        LineDiagram diagram;
+        diagram.setType(LineDiagram::Percent);
+        LineAttributes attrs;
+        attrs.setMissingValuesPolicy(LineAttributes::MissingValuesShownAsZero);
+        diagram.setLineAttributes(attrs);
+        auto clone = std::unique_ptr<LineDiagram>(diagram.clone());
+        QCOMPARE(diagram.type(), clone->type());
+        QCOMPARE(diagram.lineAttributes(), clone->lineAttributes());
 
-            // the rest is already tested in testCloningBarDiagram()
-        }
+        // the rest is already tested in testCloningBarDiagram()
+    }
 
     void testCloningPieDiagram()
-        {
-            // commenting those tests - Deprecated method
-            // will make new test for that in PolarCoordinatePlane
-            // do we want the warning ?
-            // if yes - we just need to un-comment
-            PieDiagram diagram;
-            //diagram->coordinatePlane()->setStartPosition( 15.0 );
-            diagram.setGranularity(1.5);
-            PieAttributes attrs;
-            attrs.setExplode( true );
-            attrs.setExplodeFactor( 1.5 );
-            ThreeDPieAttributes threeDAttrs;
-            threeDAttrs.setUseShadowColors( false );
-            auto clone = std::unique_ptr<PieDiagram>(diagram.clone());
-            //QCOMPARE( diagram->startPosition(), clone->startPosition() );
-            QCOMPARE(diagram.granularity(), clone->granularity());
-            QCOMPARE(diagram.pieAttributes(), clone->pieAttributes());
-            QCOMPARE(diagram.threeDPieAttributes(), clone->threeDPieAttributes());
+    {
+        // commenting those tests - Deprecated method
+        // will make new test for that in PolarCoordinatePlane
+        // do we want the warning ?
+        // if yes - we just need to un-comment
+        PieDiagram diagram;
+        // diagram->coordinatePlane()->setStartPosition( 15.0 );
+        diagram.setGranularity(1.5);
+        PieAttributes attrs;
+        attrs.setExplode(true);
+        attrs.setExplodeFactor(1.5);
+        ThreeDPieAttributes threeDAttrs;
+        threeDAttrs.setUseShadowColors(false);
+        auto clone = std::unique_ptr<PieDiagram>(diagram.clone());
+        // QCOMPARE( diagram->startPosition(), clone->startPosition() );
+        QCOMPARE(diagram.granularity(), clone->granularity());
+        QCOMPARE(diagram.pieAttributes(), clone->pieAttributes());
+        QCOMPARE(diagram.threeDPieAttributes(), clone->threeDPieAttributes());
 
-            // the rest is already tested in testCloningBarDiagram()
-        }
+        // the rest is already tested in testCloningBarDiagram()
+    }
 
     void testCloningPolarDiagram()
-        {
-            // commenting those tests - Deprecated method
-            // will make new test for that in PolarCoordinatePlane
-            // do we want the warning ?
-            // if yes - we just need to un-comment
-            PolarDiagram diagram;
-            //diagram->setZeroDegreePosition( 5 );
-            diagram.setRotateCircularLabels(true);
-            diagram.setShowDelimitersAtPosition(Position::North, false);
-            diagram.setShowDelimitersAtPosition(Position::South, true);
-            diagram.setShowLabelsAtPosition(Position::North, true);
-            diagram.setShowLabelsAtPosition(Position::South, false);
-            auto clone = std::unique_ptr<PolarDiagram>(diagram.clone());
-            //QCOMPARE( diagram->zeroDegreePosition(), clone->zeroDegreePosition() );
-            QCOMPARE(diagram.rotateCircularLabels(), clone->rotateCircularLabels());
-            QCOMPARE(diagram.showDelimitersAtPosition(Position::North), clone->showDelimitersAtPosition(Position::North));
-            QCOMPARE(diagram.showDelimitersAtPosition(Position::South), clone->showDelimitersAtPosition(Position::South));
-            QCOMPARE(diagram.showLabelsAtPosition(Position::North), clone->showLabelsAtPosition(Position::North));
-            QCOMPARE(diagram.showLabelsAtPosition(Position::South), clone->showLabelsAtPosition(Position::South));
+    {
+        // commenting those tests - Deprecated method
+        // will make new test for that in PolarCoordinatePlane
+        // do we want the warning ?
+        // if yes - we just need to un-comment
+        PolarDiagram diagram;
+        // diagram->setZeroDegreePosition( 5 );
+        diagram.setRotateCircularLabels(true);
+        diagram.setShowDelimitersAtPosition(Position::North, false);
+        diagram.setShowDelimitersAtPosition(Position::South, true);
+        diagram.setShowLabelsAtPosition(Position::North, true);
+        diagram.setShowLabelsAtPosition(Position::South, false);
+        auto clone = std::unique_ptr<PolarDiagram>(diagram.clone());
+        // QCOMPARE( diagram->zeroDegreePosition(), clone->zeroDegreePosition() );
+        QCOMPARE(diagram.rotateCircularLabels(), clone->rotateCircularLabels());
+        QCOMPARE(diagram.showDelimitersAtPosition(Position::North), clone->showDelimitersAtPosition(Position::North));
+        QCOMPARE(diagram.showDelimitersAtPosition(Position::South), clone->showDelimitersAtPosition(Position::South));
+        QCOMPARE(diagram.showLabelsAtPosition(Position::North), clone->showLabelsAtPosition(Position::North));
+        QCOMPARE(diagram.showLabelsAtPosition(Position::South), clone->showLabelsAtPosition(Position::South));
 
-            // the rest is already tested in testCloningBarDiagram()
-        }
+        // the rest is already tested in testCloningBarDiagram()
+    }
     void testCloningRingDiagram()
-        {
-            RingDiagram diagram;
-            diagram.setRelativeThickness(true);
-            auto clone = std::unique_ptr<RingDiagram>(diagram.clone());
-            QCOMPARE(diagram.relativeThickness(), clone->relativeThickness());
-            // the rest is already tested in testCloningBarDiagram()
-            // and testCloningPieDiagram()
-        }
+    {
+        RingDiagram diagram;
+        diagram.setRelativeThickness(true);
+        auto clone = std::unique_ptr<RingDiagram>(diagram.clone());
+        QCOMPARE(diagram.relativeThickness(), clone->relativeThickness());
+        // the rest is already tested in testCloningBarDiagram()
+        // and testCloningPieDiagram()
+    }
 
     void testCloningHeaderFooter()
-        {
-            HeaderFooter headerFooter;
-            headerFooter.setType(HeaderFooter::Footer);
-            TextAttributes attrs;
-            attrs.setPen( QPen(Qt::red) );
-            headerFooter.setTextAttributes(attrs);
-            auto clone = std::unique_ptr<HeaderFooter>(headerFooter.clone());
-            QCOMPARE(headerFooter.type(), clone->type());
-            QCOMPARE(headerFooter.textAttributes(), clone->textAttributes());
-        }
+    {
+        HeaderFooter headerFooter;
+        headerFooter.setType(HeaderFooter::Footer);
+        TextAttributes attrs;
+        attrs.setPen(QPen(Qt::red));
+        headerFooter.setTextAttributes(attrs);
+        auto clone = std::unique_ptr<HeaderFooter>(headerFooter.clone());
+        QCOMPARE(headerFooter.type(), clone->type());
+        QCOMPARE(headerFooter.textAttributes(), clone->textAttributes());
+    }
 
     void testCloningLegends()
-        {
-            Legend legend;
-            TextAttributes attrs;
-            attrs.setPen( QPen(Qt::red) );
-            legend.setTextAttributes(attrs);
-            legend.setShowLines(true);
-            legend.setPosition(Position::North);
-            auto clone = std::unique_ptr<Legend>(legend.clone());
-            QCOMPARE(legend.textAttributes(), clone->textAttributes());
-            QCOMPARE(legend.showLines(), clone->showLines());
-            QCOMPARE(legend.position(), clone->position());
-        }
+    {
+        Legend legend;
+        TextAttributes attrs;
+        attrs.setPen(QPen(Qt::red));
+        legend.setTextAttributes(attrs);
+        legend.setShowLines(true);
+        legend.setPosition(Position::North);
+        auto clone = std::unique_ptr<Legend>(legend.clone());
+        QCOMPARE(legend.textAttributes(), clone->textAttributes());
+        QCOMPARE(legend.showLines(), clone->showLines());
+        QCOMPARE(legend.position(), clone->position());
+    }
 
     void cleanupTestCase()
-        {
-        }
-
+    {
+    }
 
 private:
 };

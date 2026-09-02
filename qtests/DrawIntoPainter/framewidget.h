@@ -11,26 +11,24 @@
 
 #include <QWidget>
 
-namespace KChart {
-    class Chart;
+namespace KChart
+{
+class Chart;
 }
-
 
 class FrameWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit FrameWidget( QWidget * parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags() );
+    explicit FrameWidget(QWidget *parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
 
-    void paintEvent( QPaintEvent* ) override;
+    void paintEvent(QPaintEvent *) override;
 
-    void setChart( KChart::Chart* chart );
+    void setChart(KChart::Chart *chart);
 
 private:
-    KChart::Chart* mChart;
+    KChart::Chart *mChart;
 };
 
-
 #endif /* FRAMEWIDGET_H */
-
