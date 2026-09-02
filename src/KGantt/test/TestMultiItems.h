@@ -12,14 +12,18 @@
 #include <QTreeView>
 #include <QtTest>
 
+#include "kganttabstractrowcontroller.h"
 #include "kganttview.h"
+
+#include <memory>
 
 class TestMultiItems : public QObject
 {
     Q_OBJECT
 private:
-    QStandardItemModel *itemModel;
-    KGantt::View *view;
+    std::unique_ptr<QStandardItemModel> itemModel;
+    std::unique_ptr<KGantt::View> view;
+    std::unique_ptr<KGantt::AbstractRowController> rowController;
 
     void initMultiModel();
 

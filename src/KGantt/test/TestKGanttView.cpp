@@ -27,21 +27,22 @@ using namespace KGantt;
 
 void TestKGanttView::init()
 {
-    view = new KGantt::View();
+    view = std::make_unique<KGantt::View>();
 
-    itemModel = new QStandardItemModel();
+    itemModel = std::make_unique<QStandardItemModel>();
 
-    view->setModel(itemModel);
-    view->setConstraintModel(new KGantt::ConstraintModel());
-    QCOMPARE(view->model(), itemModel);
+    view->setModel(itemModel.get());
+    view->setConstraintModel(new KGantt::ConstraintModel(view.get()));
+    QCOMPARE(view->model(), itemModel.get());
 
     QCOMPARE(itemModel->rowCount(), 0);
 }
 
 void TestKGanttView::cleanup()
 {
-    delete view;
-    delete itemModel;
+    view.reset();
+    rowController.reset();
+    itemModel.reset();
 }
 
 void TestKGanttView::testApi()
@@ -193,9 +194,9 @@ void TestKGanttView::testDefaultView()
 
 void TestKGanttView::testTreeView()
 {
-    QTreeView *treeview = new QTreeView(view);
+    QTreeView *treeview = new QTreeView(view.get());
     view->setLeftView(treeview);
-    view->setModel(itemModel); // must be set again
+    view->setModel(itemModel.get()); // must be set again
 
     initTreeModel();
 
@@ -243,10 +244,11 @@ void TestKGanttView::initListModel()
 
 void TestKGanttView::testListView()
 {
-    QListView *listview = new QListView(view);
+    QListView *listview = new QListView(view.get());
     view->setLeftView(listview);
-    view->setRowController(new KGantt::ListViewRowController(listview, view->ganttProxyModel()));
-    view->setModel(itemModel); // must be set again
+    rowController = std::make_unique<KGantt::ListViewRowController>(listview, view->ganttProxyModel());
+    view->setRowController(rowController.get());
+    view->setModel(itemModel.get()); // must be set again
     initListModel();
 }
 
@@ -319,28 +321,28 @@ void TestKGanttView::testConstraints()
 
 void TestKGanttView::testSetGraphicsView()
 {
-    delete view;
-    delete itemModel;
+    view.reset();
+    itemModel.reset();
 
-    view = new KGantt::View();
+    view = std::make_unique<KGantt::View>();
 
-    itemModel = new QStandardItemModel();
+    itemModel = std::make_unique<QStandardItemModel>();
 
     GraphicsView *gv = new GraphicsView();
     view->setGraphicsView(gv);
     QVERIFY(view->graphicsView() == gv);
 
-    view->setModel(itemModel);
-    view->setConstraintModel(new KGantt::ConstraintModel());
+    view->setModel(itemModel.get());
+    view->setConstraintModel(new KGantt::ConstraintModel(view.get()));
 
     initTreeModel();
 }
 
 void TestKGanttView::testSetRowController()
 {
-    TreeViewRowController *rc = new TreeViewRowController(qobject_cast<QTreeView *>(view->leftView()), view->ganttProxyModel());
-    view->setRowController(rc);
-    QVERIFY(view->rowController() == rc);
+    rowController = std::make_unique<TreeViewRowController>(qobject_cast<QTreeView *>(view->leftView()), view->ganttProxyModel());
+    view->setRowController(rowController.get());
+    QVERIFY(view->rowController() == rowController.get());
 
     initTreeModel();
 }

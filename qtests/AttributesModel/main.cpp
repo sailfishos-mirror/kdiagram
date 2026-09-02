@@ -15,6 +15,8 @@
 #include <KChartCartesianCoordinatePlane>
 #include <KChartDataValueAttributes>
 
+#include <memory>
+
 using namespace KChart;
 
 class TestKChartAttributesModel : public QObject {
@@ -27,10 +29,10 @@ private Q_SLOTS:
       tableModel->loadFromCSV( ":/data" );
       tableModel->setSupplyHeaderData( false );
       m_model = tableModel;
-      m_plane = new CartesianCoordinatePlane(nullptr);
-      m_bars = new BarDiagram();
+      m_plane = std::make_unique<CartesianCoordinatePlane>(nullptr);
+      m_bars = std::make_unique<BarDiagram>();
       m_bars->setModel( m_model );
-      m_lines = new LineDiagram();
+      m_lines = std::make_unique<LineDiagram>();
       m_lines->setModel( m_model );
   }
 
@@ -72,7 +74,7 @@ private Q_SLOTS:
       // Note: a SHARED atributes-model must be owned by the USER
       //       but it may not be owned by any of the diagrams
       //       see API docu of AbstractDiagram::setAttributesModel()
-      AttributesModel *attrsmodel = new AttributesModel( m_model, nullptr );
+      AttributesModel *attrsmodel = new AttributesModel(m_model, this);
 
       m_lines->setAttributesModel( attrsmodel );
       m_bars->setAttributesModel(  attrsmodel );
@@ -95,16 +97,16 @@ private Q_SLOTS:
 
   void testKChartAttributesModelTestSharedFromStart()
   {
-      delete m_lines;
-      delete m_bars;
-      delete m_plane;
-      m_plane = new CartesianCoordinatePlane(nullptr);
-      m_bars = new BarDiagram();
+      m_lines.reset();
+      m_bars.reset();
+      m_plane.reset();
+      m_plane = std::make_unique<CartesianCoordinatePlane>(nullptr);
+      m_bars = std::make_unique<BarDiagram>();
       m_bars->setModel( m_model );
-      m_lines = new LineDiagram();
+      m_lines = std::make_unique<LineDiagram>();
       m_lines->setModel( m_model );
 
-      AttributesModel* attrsmodel = new AttributesModel( m_model, m_plane );
+      AttributesModel *attrsmodel = new AttributesModel(m_model, m_plane.get());
       m_lines->setAttributesModel(attrsmodel);
       m_bars->setAttributesModel(attrsmodel);
       
@@ -122,8 +124,8 @@ private Q_SLOTS:
 
   void testKChartAttributesModelTestPrivate()
   {
-      m_lines->setAttributesModel( new AttributesModel(m_model,m_lines) );
-      m_bars->setAttributesModel( new AttributesModel(m_model,m_bars) );
+      m_lines->setAttributesModel(new AttributesModel(m_model, m_lines.get()));
+      m_bars->setAttributesModel(new AttributesModel(m_model, m_bars.get()));
       QModelIndex idx = m_lines->model()->index( 0, 2, QModelIndex() );
       DataValueAttributes a = m_lines->dataValueAttributes( idx );
       QCOMPARE( a.isVisible(), false ); // we got a default model again
@@ -137,15 +139,16 @@ private Q_SLOTS:
 
   void cleanupTestCase()
   {
-      delete m_plane;
+      m_lines.reset();
+      m_bars.reset();
+      m_plane.reset();
   }
 
 private:
   QAbstractItemModel *m_model;
-  CartesianCoordinatePlane* m_plane;
-  BarDiagram *m_bars;
-  LineDiagram *m_lines;
-
+  std::unique_ptr<CartesianCoordinatePlane> m_plane;
+  std::unique_ptr<BarDiagram> m_bars;
+  std::unique_ptr<LineDiagram> m_lines;
 };
 
 QTEST_MAIN(TestKChartAttributesModel)

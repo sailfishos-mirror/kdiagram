@@ -99,56 +99,47 @@ void MainWindow::editingFinished()
 
 void MainWindow::addPlots()
 {
-	for (int r = 0; r < m_sourceModel->columnCount(); r++)
-	{
-		for (int c = 0; c < m_sourceModel->columnCount(); c++)
-		{
+    for (int r = 0; r < m_sourceModel->columnCount(); r++) {
+        for (int c = 0; c < m_sourceModel->columnCount(); c++) {
+            Chart *chart = new Chart;
+            m_paramVsParamGridLayout->addWidget(chart, r, c);
 
-			Chart * chart = new Chart;
-			m_paramVsParamGridLayout->addWidget(chart, r, c);
+            CartesianCoordinatePlane *plane = static_cast<CartesianCoordinatePlane *>(chart->coordinatePlane());
 
-			CartesianCoordinatePlane * plane = static_cast<CartesianCoordinatePlane *>(chart->coordinatePlane());
+            // Hide grid.
+            GridAttributes ga = plane->globalGridAttributes();
+            ga.setGridVisible(false);
+            plane->setGlobalGridAttributes(ga);
 
-			// Hide grid.
-			GridAttributes ga = plane->globalGridAttributes();
-			ga.setGridVisible(false);
-			plane->setGlobalGridAttributes(ga);
+            // Set axes fixed scale.
+            qreal xoffset(c * 10);
+            qreal yoffset(r * 10);
+            QPair<qreal, qreal> horizontalRange(xoffset, xoffset + 10);
+            QPair<qreal, qreal> verticalRange(yoffset, yoffset + 10);
+            plane->setHorizontalRange(horizontalRange);
+            plane->setVerticalRange(verticalRange);
 
-			// Set axes fixed scale.
-			qreal						xoffset(c * 10);
-			qreal						yoffset(r * 10);
-			QPair<qreal, qreal>	horizontalRange(xoffset, xoffset + 10);
-			QPair<qreal, qreal>	verticalRange(yoffset, yoffset + 10);
-			plane->setHorizontalRange(horizontalRange);
-			plane->setVerticalRange(verticalRange);
+            if (r != c) {
+                LineDiagram *lineDiagram = new LineDiagram;
+                ModelParamVsParamPlot *modelParamVsParamPlot = new ModelParamVsParamPlot(m_sourceModel, c, r, lineDiagram);
+                lineDiagram->setDatasetDimension(2);
+                lineDiagram->setModel(modelParamVsParamPlot);
+                lineDiagram->setPen(Qt::NoPen);
+                setMarkerAttributes(lineDiagram);
 
-			if (r == c)
-			{
-			}
-			else
-			{
-				ModelParamVsParamPlot	*modelParamVsParamPlot =
-					new ModelParamVsParamPlot(m_sourceModel, c, r);
+                CartesianAxis *xAxis = new CartesianAxis(lineDiagram);
+                CartesianAxis *yAxis = new CartesianAxis(lineDiagram);
+                xAxis->setPosition(CartesianAxis::Bottom);
+                yAxis->setPosition(CartesianAxis::Left);
+                xAxis->setTitleText('P' + QString::number(c));
+                yAxis->setTitleText('P' + QString::number(r));
+                lineDiagram->addAxis(xAxis);
+                lineDiagram->addAxis(yAxis);
 
-				LineDiagram	*lineDiagram = new LineDiagram;
-				lineDiagram->setDatasetDimension(2);
-				lineDiagram->setModel(modelParamVsParamPlot);
-				lineDiagram->setPen(Qt::NoPen);
-				setMarkerAttributes(lineDiagram);
-
-				CartesianAxis	*xAxis = new CartesianAxis(lineDiagram);
-				CartesianAxis	*yAxis = new CartesianAxis(lineDiagram);
-				xAxis->setPosition(CartesianAxis::Bottom);
-				yAxis->setPosition(CartesianAxis::Left);
-				xAxis->setTitleText('P' + QString::number(c));
-				yAxis->setTitleText('P' + QString::number(r));
-				lineDiagram->addAxis(xAxis);
-				lineDiagram->addAxis(yAxis);
-
-				chart->coordinatePlane()->replaceDiagram(lineDiagram);
-			}
-		} // for all rows
-	} // for all columns
+                chart->coordinatePlane()->replaceDiagram(lineDiagram);
+            }
+        } // for all rows
+    } // for all columns
 } // MainWindow::addPlots()
 
 

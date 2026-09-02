@@ -27,21 +27,22 @@ using namespace KGantt;
 
 void TestMultiItems::init()
 {
-    view = new KGantt::View();
+    view = std::make_unique<KGantt::View>();
 
-    itemModel = new QStandardItemModel();
+    itemModel = std::make_unique<QStandardItemModel>();
 
-    view->setModel(itemModel);
-    view->setConstraintModel(new KGantt::ConstraintModel());
-    QCOMPARE(view->model(), itemModel);
+    view->setModel(itemModel.get());
+    view->setConstraintModel(new KGantt::ConstraintModel(view.get()));
+    QCOMPARE(view->model(), itemModel.get());
 
     QCOMPARE(itemModel->rowCount(), 0);
 }
 
 void TestMultiItems::cleanup()
 {
-    delete view;
-    delete itemModel;
+    view.reset();
+    rowController.reset();
+    itemModel.reset();
 }
 
 void TestMultiItems::initMultiModel()
@@ -121,9 +122,9 @@ void TestMultiItems::testDefaultView()
 
 void TestMultiItems::testTreeView()
 {
-    QTreeView *treeview = new QTreeView(view);
+    QTreeView *treeview = new QTreeView(view.get());
     view->setLeftView(treeview);
-    view->setModel(itemModel); // must be set again
+    view->setModel(itemModel.get()); // must be set again
 
     initMultiModel();
 
@@ -133,10 +134,11 @@ void TestMultiItems::testTreeView()
 
 void TestMultiItems::testListView()
 {
-    QListView *listview = new QListView(view);
+    QListView *listview = new QListView(view.get());
     view->setLeftView(listview);
-    view->setRowController(new KGantt::ListViewRowController(listview, view->ganttProxyModel()));
-    view->setModel(itemModel); // must be set again
+    rowController = std::make_unique<KGantt::ListViewRowController>(listview, view->ganttProxyModel());
+    view->setRowController(rowController.get());
+    view->setModel(itemModel.get()); // must be set again
     initMultiModel();
 
     QCOMPARE(itemModel->rowCount(), 2);
