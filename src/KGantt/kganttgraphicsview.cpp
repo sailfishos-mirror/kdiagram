@@ -441,6 +441,7 @@ GraphicsView::GraphicsView(QWidget *parent)
 
 GraphicsView::~GraphicsView()
 {
+    setScene(nullptr);
     delete _d;
 }
 

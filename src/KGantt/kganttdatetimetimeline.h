@@ -64,6 +64,7 @@ public:
      * By default, no timeline is displayed.
      */
     DateTimeTimeLine();
+    ~DateTimeTimeLine() override;
 
     /**
      * @return options

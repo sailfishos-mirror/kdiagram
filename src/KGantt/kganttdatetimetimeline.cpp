@@ -44,6 +44,11 @@ DateTimeTimeLine::DateTimeTimeLine()
     connect(&_d->timer, SIGNAL(timeout()), this, SIGNAL(updated()));
 }
 
+DateTimeTimeLine::~DateTimeTimeLine()
+{
+    delete _d;
+}
+
 #define d d_func()
 
 DateTimeTimeLine::Options DateTimeTimeLine::options() const

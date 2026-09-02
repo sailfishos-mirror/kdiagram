@@ -310,7 +310,9 @@ AbstractRowController *GraphicsScene::rowController() const
 AbstractGrid *GraphicsScene::takeGrid()
 {
     AbstractGrid *grid = d->grid;
-    grid->disconnect(this);
+    if (grid) {
+        grid->disconnect(this);
+    }
     d->grid = nullptr;
     if (grid) {
         // revert to the default_grid
